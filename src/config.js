@@ -1,10 +1,9 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyDGfuA93mjwmcc3IuefEE3Q8tXdCetHtQA",
-  authDomain: "ioioioi.firebaseapp.com",
-  databaseURL: "https://ioioioi.firebaseio.com",
-  projectId: "ioioioi",
-  storageBucket: "ioioioi.appspot.com",
-  messagingSenderId: "759113465407",
-  appId: "1:759113465407:web:a4592efce4a96e2af9028a",
-  measurementId: "G-X507QH7VPV"
+	apiKey: "AIzaSyAsce1vZ82rHuTDHXlRE6wtOpeR8fo0vMM",
+	authDomain: "watershed-app.firebaseapp.com",
+	databaseURL: "https://watershed-app.firebaseio.com",
+	projectId: "watershed-app",
+	storageBucket: "watershed-app.appspot.com",
+	messagingSenderId: "478129647871",
+	appId: "1:478129647871:web:b3052cf16d07779fae9cca",
 };
