@@ -3,7 +3,7 @@ import {motion, AnimatePresence} from "framer-motion";
 import "../styles.css";
 import ReactJson from "react-json-view";
 import {ChromePicker} from "react-color";
-import _ from "lodash";
+//import _ from "lodash";
 export const Flex = ({
 	children,
 	style,

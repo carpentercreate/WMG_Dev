@@ -9,12 +9,12 @@ import {
 } from "reactfire";
 import * as I from "react-icons/fi";
 import {Flex, Box, J, Menu} from "./components";
-import {useCollection, l} from "./Utilities";
+//import {useCollection, l} from "./Utilities";
 import LoginBtn from "./Auth";
-import {motion, AnimatePresence} from "framer-motion";
+import {motion} from "framer-motion";
 import {useToggle} from "react-use";
 
-const {stringify: st} = JSON;
+//const {stringify: st} = JSON;
 const Json = ({name, data, ...rest}) => {
 	return (
 		<>
@@ -26,7 +26,7 @@ const Json = ({name, data, ...rest}) => {
 //User
 const User = ({id}) => {
 	const db = useFirestore();
-	const {FieldValue} = useFirestore;
+	//const {FieldValue} = useFirestore;
 	const userref = db.collection("users").doc(id);
 	const profile = useFirestoreDocData(userref);
 	const update = (v) => userref.set(v, {merge: true});
@@ -70,23 +70,23 @@ function Layout() {
 		.where("interestedParties", "array-contains", selectedAccount.id);
 	const songs = useFirestoreCollectionData(songsRef, {idField: "id"});
 	const selectedSong = songs[0];
-	const journalsRef = db
-		.collection("journals")
-		.where("songID", "==", selectedSong.id);
-	const journals = useFirestoreCollectionData(journalsRef, {idField: "id"});
+	//const journalsRef = db
+	//	.collection("journals")
+	//	.where("songID", "==", selectedSong.id);
+	//const journals = useFirestoreCollectionData(journalsRef, {idField: "id"});
 
 	const [menuIsOpen, toggleMenu] = useToggle(false);
 	const [selected, setSelected] = useState();
 
-	const variants = {
-		initial: {
-			opacity: 0,
-		},
-		enter: {
-			opacity: 1,
-		},
-		exit: {opacity: 0},
-	};
+	//const variants = {
+	//	initial: {
+	//		opacity: 0,
+	//	},
+	//	enter: {
+	//		opacity: 1,
+	//	},
+	//	exit: {opacity: 0},
+	//};
 	return (
 		<SuspenseWithPerf fallback={"loading"} traceId={"hello"}>
 			<>

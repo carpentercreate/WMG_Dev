@@ -1,6 +1,6 @@
 import React from "react";
-import {useState} from "react";
-import {motion, AnimateSharedLayout, AnimatePresence} from "framer-motion";
+//import {useState} from "react";
+import {motion, AnimateSharedLayout} from "framer-motion";
 import * as I from "react-icons/fi";
 import "./menu.css";
 
@@ -41,15 +41,15 @@ function MenuContainer({children, isOpen}) {
 		</motion.div>
 	);
 }
-function MenuIcon({isOpen, cb}) {
-	return (
-		<motion.div
-			layout
-			style={{textAlign: "center", padding: 12, fontSize: "28px"}}>
-			{isOpen ? <I.FiChevronsUp /> : <I.FiChevronsDown />}
-		</motion.div>
-	);
-}
+//function MenuIcon({isOpen, cb}) {
+//	return (
+//		<motion.div
+//			layout
+//			style={{textAlign: "center", padding: 12, fontSize: "28px"}}>
+//			{isOpen ? <I.FiChevronsUp /> : <I.FiChevronsDown />}
+//		</motion.div>
+//	);
+//}
 function IconButton({iconName, isSelected, onClick}) {
 	return (
 		<motion.li
