@@ -76,6 +76,8 @@ function Layout() {
 	const journals = useFirestoreCollectionData(journalsRef, {idField: "id"});
 
 	const [menuIsOpen, toggleMenu] = useToggle(false);
+	const [selected, setSelected] = useState();
+
 	const variants = {
 		initial: {
 			opacity: 0,
@@ -88,9 +90,12 @@ function Layout() {
 	return (
 		<SuspenseWithPerf fallback={"loading"} traceId={"hello"}>
 			<>
-				<Flex direction="column" style={{minHeight: "100vh"}}>
-					<Menu isOpen={menuIsOpen} cb={toggleMenu} />
-					<Box fr={0} min="80px">
+				<Flex
+					direction="column"
+					bg="black"
+					style={{minHeight: "100vh", color: "white"}}>
+					<Menu selected={selected} cb={setSelected} isOpen={menuIsOpen} />
+					<Box bg="black" fr={0} min="80px">
 						<Box style={{margin: "24px"}} justify="flex-start">
 							<motion.h2 layout> WMG</motion.h2>
 						</Box>
@@ -100,11 +105,11 @@ function Layout() {
 							min="auto"
 							cursor="pointer"
 							onClick={() => toggleMenu()}>
-							<I.FiMenu style={{margin: "24px"}} size="23px" color="#000" />
+							<I.FiMenu style={{margin: "24px"}} size="23px" color="#fff" />
 						</Box>
 					</Box>
 					<Box
-						bg="lightgray"
+						bg="black"
 						direction="column"
 						style={{height: "auto", overflow: "scroll"}}>
 						{user && <User id={user.uid} />}
