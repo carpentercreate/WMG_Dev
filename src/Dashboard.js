@@ -9,8 +9,8 @@ import {
 	useFirestoreCollectionData,
 } from "reactfire";
 import {ThemeProvider} from "theme-ui";
-import {motion} from "framer-motion";
-import {MainView, J} from "./components";
+import {motion, AnimateSharedLayout, AnimatePresence} from "framer-motion";
+import {MainView, Box} from "./components";
 import LoginBtn from "./Auth";
 
 //User
@@ -24,35 +24,46 @@ const User = ({id}) => {
 };
 function Loading() {
 	return (
-		<motion.div
-			initial={{rotate: 0}}
-			style={{
-				width: "80px",
-				height: "10px",
-				background: "rgba(255,0,0,.5)",
-			}}
-			animate={{rotate: 360}}
-			transition={{
-				yoyo: Infinity,
+		<Box align="center" w={100}>
+			<motion.div
+				initial={{rotate: 0}}
+				style={{
+					width: "80px",
+					height: "10px",
+					background: "rgba(255,0,0,.5)",
+				}}
+				animate={{rotate: 360}}
+				transition={{
+					yoyo: Infinity,
 
-				duration: 3,
-			}}
-			className="Loading"
-		/>
+					duration: 3,
+				}}
+				className="Loading"
+			/>
+		</Box>
 	);
 }
 function Song({songs}) {
 	return (
-		<div>
+		<Box
+			h="auto"
+			bg="#000"
+			color="#fff"
+			justify="center"
+			shadow="0px 0px 90px -31px rgba(244,244,244, .4)">
 			<SuspenseWithPerf fallback={<Loading />}>
-				<StorageImage
-					style={{width: "120px"}}
-					storagePath="images/adam-carpentar.jpg"
-				/>
+				<Box align="center" w={120} alignSelf="center" radius="120px">
+					<StorageImage
+						style={{width: "120px"}}
+						storagePath="images/adam-carpentar.jpg"
+					/>
+				</Box>
 			</SuspenseWithPerf>
-			<h1>{songs[0].name}</h1>
-			<h4>{songs[0].id}</h4>
-		</div>
+			<Box whileHover={{color: "#fff"}}>
+				<h1 layout>{songs[0].name}</h1>
+				<h4 layout>{songs[0].id}</h4>
+			</Box>
+		</Box>
 	);
 }
 function Providers() {
@@ -77,7 +88,10 @@ function Providers() {
 	//const [selected, setSelected] = useState();
 
 	return (
-		<ThemeProvider>
+		<ThemeProvider
+			theme={{
+				colors: {text: "#fff", primary: "#f00", background: "#000"},
+			}}>
 			<SuspenseWithPerf fallback={<Loading />} traceId={"hello"}>
 				<MainView>
 					<Song songs={songs} />

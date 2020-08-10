@@ -1,6 +1,6 @@
 //import * as C from "./StyledComponents";
-import {Menu} from "./Menu";
+import {Menu} from "./Menus";
 import {MainView, HorizontalView} from "./Layouts";
-import {J} from "./StyledComponents";
+import {J, Box} from "./StyledComponents";
 
-export {Menu, J, MainView, HorizontalView};
+export {Menu, J, MainView, Box, HorizontalView};

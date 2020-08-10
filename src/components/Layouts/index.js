@@ -1,7 +1,7 @@
 import React from "react";
-
+import {useThemeUI} from "theme-ui";
 import {MdDragHandle} from "react-icons/md";
-import {Menu} from "../Menu";
+import {Menu} from "../Menus";
 import {Frame, Page} from "framer";
 import {motion} from "framer-motion";
 import "./layouts.css";
@@ -26,8 +26,11 @@ export function MainView({
 
 	current,
 }) {
+	const ctx = useThemeUI();
+	const {theme} = ctx;
 	return (
 		<Page
+			background={theme.colors.background}
 			defaultEffect="pile"
 			width="100vw"
 			height="100vh"
@@ -36,7 +39,7 @@ export function MainView({
 			currentPage={current}
 			direction="vertical"
 			gap={0}>
-			<MainPage>{children}</MainPage>
+			<MainPage colors={theme.colors}>{children}</MainPage>
 			<BottomView />
 		</Page>
 	);
@@ -53,15 +56,10 @@ function BottomView({isMain, colors = {bg: "gray"}, ...rest}) {
 		</Frame>
 	);
 }
-function MainPage({
-	children,
-	colors = {bg: "red", text: "white", primary: "red"},
-	style,
-	isMain,
-	...rest
-}) {
+function MainPage({children, colors, style, isMain, ...rest}) {
 	return (
 		<Frame
+			background={colors.background}
 			size="100%"
 			//height={isMain ? "100%" : "88%"}
 			{...rest}>

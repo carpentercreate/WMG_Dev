@@ -1,7 +1,7 @@
 import React from "react";
 import {motion, AnimateSharedLayout} from "framer-motion";
 import * as I from "react-icons/fi";
-import "./menu.css";
+import "./menus.css";
 
 export function Menu({
 	cb = console.log,
