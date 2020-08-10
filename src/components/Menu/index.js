@@ -4,20 +4,18 @@ import * as I from "react-icons/fi";
 import "./menu.css";
 
 export function Menu({
-	cb,
+	cb = console.log,
 	selected,
 	height = "60px",
 	theme = {
 		colors: {text: "#f00", opaque: "rgba(255,255,255,.3)"},
 		space: ["4px", "8px", "12px", "16px"],
 	},
-
-	...rest
 }) {
 	const {colors} = theme;
 
 	return (
-		<motion.div layout {...rest}>
+		<motion.div layout>
 			<AnimateSharedLayout>
 				<motion.ul
 					layout

@@ -1,61 +1,69 @@
 import React from "react";
 
 import {MdDragHandle} from "react-icons/md";
-
+import {Menu} from "../Menu";
 import {Frame, Page} from "framer";
 import {motion} from "framer-motion";
 import "./layouts.css";
-export function HorizontalViews({children, ...rest}) {
+export function HorizontalView({children, current, ...rest}) {
 	return (
-		<motion.div layout className="HorizontalViews" {...rest}>
+		<Page
+			defaultEffect="pile"
+			size="100%"
+			top={0}
+			overflow="visible"
+			wheelEnabled="true"
+			paddingTop={150}
+			currentPage={current}
+			direction="horizontal"
+			gap={0}>
 			hi
-		</motion.div>
+		</Page>
 	);
 }
-export function MainViews({
+export function MainView({
 	children,
-	selected,
-	cb,
-	isOpen,
+
 	current,
-	toggle,
-	...rest
 }) {
 	return (
-		<Frame height="100vh" width="100vw" top={0} {...rest}>
-			<Page
-				defaultEffect="pile"
-				size="100%"
-				top={0}
-				overflow="visible"
-				wheelEnabled="true"
-				paddingTop={150}
-				currentPage={current}
-				direction="vertical"
-				gap={0}
-				background="rgba(0,0,0,1)">
-				<BottomView />
-				<MainView>hi</MainView>
-			</Page>
+		<Page
+			defaultEffect="pile"
+			width="100vw"
+			height="100vh"
+			top={0}
+			overflow="visible"
+			currentPage={current}
+			direction="vertical"
+			gap={0}>
+			<MainPage>{children}</MainPage>
+			<BottomView />
+		</Page>
+	);
+}
+function BottomView({isMain, colors = {bg: "gray"}, ...rest}) {
+	return (
+		<Frame
+			size="100%"
+			background="black"
+			//height={isMain ? "100%" : "88%"}
+			{...rest}>
+			<Menu />
+			<HorizontalView />
 		</Frame>
 	);
 }
-function BottomView() {
-	return <MdDragHandle />;
-}
-function MainView({
+function MainPage({
 	children,
-	colors = {bg: "black", text: "white", primary: "red"},
+	colors = {bg: "red", text: "white", primary: "red"},
 	style,
 	isMain,
 	...rest
 }) {
 	return (
 		<Frame
-			style={{color: colors.text, textAlign: "center", ...style}}
 			size="100%"
 			//height={isMain ? "100%" : "88%"}
-			background={isMain ? colors.bg : "#222"}
 			{...rest}>
 			{children}
 		</Frame>
