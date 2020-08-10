@@ -1,34 +1,8 @@
 import React from "react";
-//import {useState} from "react";
 import {motion, AnimateSharedLayout} from "framer-motion";
 import * as I from "react-icons/fi";
-import {MdDragHandle} from "react-icons/md";
 import "./menu.css";
 
-export default function MenuWrap({
-	selected = iconNames[0],
-	isOpen,
-	toggle,
-	cb,
-	theme = {
-		colors: {text: "#f00", opaque: "rgba(255,255,255,.3)"},
-		space: ["4px", "8px", "12px", "16px"],
-	},
-}) {
-	const {colors, space} = theme;
-
-	return (
-		<motion.div layout>
-			<Menu
-				toggle={toggle}
-				cb={cb}
-				selected={selected}
-				theme={theme}
-				isOpen={isOpen}
-			/>
-		</motion.div>
-	);
-}
 export function Menu({
 	cb,
 	selected,
@@ -40,7 +14,7 @@ export function Menu({
 
 	...rest
 }) {
-	const {colors, space} = theme;
+	const {colors} = theme;
 
 	return (
 		<motion.div layout {...rest}>
