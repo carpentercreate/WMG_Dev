@@ -1,17 +1,17 @@
 import * as React from "react";
-import {motion, AnimatePresence, AnimateSharedLayout} from "framer-motion";
+import {motion, AnimatePresence} from "framer-motion";
 import "../styles.css";
 import ReactJson from "react-json-view";
 import {ChromePicker} from "react-color";
 //import _ from "lodash";
-const percentages = [0, 10, 25, 33, 40, 50, 60, 66, 75, 85, 90, 100];
+//const percentages = [0, 10, 25, 33, 40, 50, 60, 66, 75, 85, 90, 100];
 const space = [0, 4, 8, 12, 16, 24, 48, 72, 80, 88, 96, 100];
 const radii = [2, 4, 12, 16, 24, 36, 54, 72, 96, 100];
-const toPx = (v) => `${v}px`;
-const toVw = (v) => `${v}vw`;
-const toVh = (v) => `${v}vh`;
-const toPerc = (v) => `${v}%`;
-const toScale = (v) => v * 0.01;
+//const toPx = (v) => `${v}px`;
+//const toVw = (v) => `${v}vw`;
+//const toVh = (v) => `${v}vh`;
+//const toPerc = (v) => `${v}%`;
+//const toScale = (v) => v * 0.01;
 const defaultFont =
 	'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif';
 

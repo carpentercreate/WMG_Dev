@@ -25,6 +25,29 @@ ol {
   align-items: center;
 }
 
+input {
+  border: 0px;
+  border-bottom: 2px solid black;
+  background: #dedede;
+  font-size: 21px;
+  font-weight: 500;
+  padding: 12px 4px;
+  outline: 0px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+button {
+  background: red;
+  font-size: 16px;
+  letter-spacing: 2px;
+  border: 0px;
+  outlind: 0px;
+  padding: 12px;
+  width: auto;
+  background: #dedede;
+}
+
 .icon {
   font-size: 24px;
   cursor: pointer;
