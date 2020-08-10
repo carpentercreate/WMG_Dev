@@ -7,8 +7,11 @@ import {
 	useFirestoreDocData,
 	useFirestoreCollectionData,
 } from "reactfire";
+import {MdDragHandle} from "react-icons/md";
+
 import * as I from "react-icons/fi";
-import {Flex, Box, J, Menu} from "./components";
+import {Frame, Page} from "framer";
+import {J, Menu} from "./components";
 //import {useCollection, l} from "./Utilities";
 import LoginBtn from "./Auth";
 import {motion} from "framer-motion";
@@ -32,31 +35,111 @@ const User = ({id}) => {
 	const update = (v) => userref.set(v, {merge: true});
 	const remove = (v) => userref.set(v);
 
+	return <>{id ? <h1>{profile.name}</h1> : <h4>no user</h4>}</>;
+};
+function Views({children, selected, cb, isOpen, current, toggle, ...rest}) {
 	return (
-		<Json
-			name="User"
-			data={profile}
-			onAdd={update}
-			onDelete={remove}
-			onEdit={update}
-		/>
+		<Frame height="100vh" width="100vw" top={0} {...rest}>
+			<Menu
+				style={{position: "absolute", zIndex: "999999"}}
+				selected={selected}
+				cb={cb}
+				isOpen={isOpen}
+				toggle={toggle}
+				height="12vh"
+			/>
+
+			<Page
+				defaultEffect="pile"
+				size="100%"
+				top={0}
+				overflow="visible"
+				wheelEnabled="true"
+				paddingTop={150}
+				currentPage={current}
+				direction="vertical"
+				gap={0}
+				background="rgba(0,0,0,1)">
+				{children}
+			</Page>
+		</Frame>
 	);
-};
-//Accounts
-const Accounts = ({account}) => {
-	return <Json name="Accounts" data={account} />;
-};
+}
+function View({
+	children,
+	colors = {bg: "black", text: "white", primary: "red"},
+	style,
+	isMain,
+	...rest
+}) {
+	return (
+		<Frame
+			style={{color: colors.text, textAlign: "center", ...style}}
+			size="100%"
+			//height={isMain ? "100%" : "88%"}
+			background={isMain ? colors.bg : "#222"}
+			{...rest}>
+			{children}
+		</Frame>
+	);
+}
 
-///Songs
-const Songs = ({songs}) => {
-	return <Json name="Songs" data={songs} />;
-};
-
-///Journals
-const Journals = ({songID}) => {
-	return <Json name="Journals for Song #1" data={songID} />;
-};
-
+function SongForm({
+	fields = [
+		{
+			name: "name",
+			label: "Name",
+			type: "Text",
+		},
+		{
+			name: "gross",
+			label: "Name",
+			type: "number",
+		},
+	],
+}) {
+	return (
+		<motion.ul
+			layout
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "space-evenly",
+				justifyContent: "center",
+				margin: "12px",
+			}}>
+			{fields.map((v, k) => {
+				return (
+					<li
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "center",
+							alignItems: "center",
+							textAlign: "left",
+							width: "100%",
+						}}>
+						<label style={{alignSelf: "flex-start"}} htmlFor={v.name}>
+							{v.name}
+						</label>
+						<input
+							id={v.name}
+							style={{
+								margin: "12px 0px",
+								fontSize: "1.4em",
+								border: "0px",
+								width: "100%",
+								background: "rgba(255,255,255,0.2)",
+							}}
+							key={v.name}
+							{...v}
+						/>
+					</li>
+				);
+			})}
+		</motion.ul>
+	);
+}
 function Layout() {
 	const db = useFirestore();
 	const user = useUser();
@@ -69,7 +152,7 @@ function Layout() {
 		.collection("songs")
 		.where("interestedParties", "array-contains", selectedAccount.id);
 	const songs = useFirestoreCollectionData(songsRef, {idField: "id"});
-	const selectedSong = songs[0];
+	//const selectedSong = songs[0];
 	//const journalsRef = db
 	//	.collection("journals")
 	//	.where("songID", "==", selectedSong.id);
@@ -78,52 +161,37 @@ function Layout() {
 	const [menuIsOpen, toggleMenu] = useToggle(false);
 	const [selected, setSelected] = useState();
 
-	//const variants = {
-	//	initial: {
-	//		opacity: 0,
-	//	},
-	//	enter: {
-	//		opacity: 1,
-	//	},
-	//	exit: {opacity: 0},
-	//};
 	return (
 		<SuspenseWithPerf fallback={"loading"} traceId={"hello"}>
 			<>
-				<Flex
-					direction="column"
-					bg="black"
-					style={{minHeight: "100vh", color: "white"}}>
-					<Menu selected={selected} cb={setSelected} isOpen={menuIsOpen} />
-					<Box bg="black" fr={0} min="80px">
-						<Box style={{margin: "24px"}} justify="flex-start">
-							<motion.h2 layout> WMG</motion.h2>
-						</Box>
+				<User id={user.uid} />
 
-						<Box
-							fr={0}
-							min="auto"
-							cursor="pointer"
-							onClick={() => toggleMenu()}>
-							<I.FiMenu style={{margin: "24px"}} size="23px" color="#fff" />
-						</Box>
-					</Box>
-					<Box
-						bg="black"
-						direction="column"
-						style={{height: "auto", overflow: "scroll"}}>
-						{user && <User id={user.uid} />}
-						<SuspenseWithPerf fallback={"loading data"} traceId={"hello"}>
-							<Accounts account={selectedAccount} />
-							<Songs songs={songs} />
-							<Journals songID={selectedSong} />
-						</SuspenseWithPerf>
-					</Box>
-					<Box bg="primary" fr={0} min="80px" />
-				</Flex>
+				<Views
+					selected={selected}
+					cb={setSelected}
+					isOpen={menuIsOpen}
+					toggle={(v) => toggleMenu(v)}>
+					<View isMain={true}>1</View>
+
+					<View
+						overflow="hidden"
+						radius="24px 24px 0px 0px"
+						y={"-8vh"}
+						style={{height: "108vh"}}>
+						<MdDragHandle
+							size="33px"
+							color="#555"
+							style={{transform: "scaleX(1.6)", margin: 8}}
+						/>
+						<SongForm />
+					</View>
+				</Views>
 			</>
 		</SuspenseWithPerf>
 	);
+}
+function name({children, ...rest}) {
+	return <motion.div layout className="name" {...rest} />;
 }
 export function Dashboard() {
 	return (

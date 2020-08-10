@@ -2,86 +2,108 @@ import React from "react";
 //import {useState} from "react";
 import {motion, AnimateSharedLayout} from "framer-motion";
 import * as I from "react-icons/fi";
+import {MdDragHandle} from "react-icons/md";
 import "./menu.css";
 
-export default function Menu({selected = iconNames[0], isOpen, cb}) {
+export default function MenuWrap({
+	selected = iconNames[0],
+	isOpen,
+	toggle,
+	cb,
+	theme = {
+		colors: {text: "#f00", opaque: "rgba(255,255,255,.3)"},
+		space: ["4px", "8px", "12px", "16px"],
+	},
+}) {
+	const {colors, space} = theme;
+
 	return (
-		<>
-			<MenuContainer isOpen={isOpen}>
-				<AnimateSharedLayout>
-					<motion.ul layout>
-						{iconNames.map((iconName) => (
-							<IconButton
-								key={iconName}
-								iconName={iconName}
-								isSelected={selected === iconName}
-								onClick={() => cb(iconName)}
-							/>
-						))}
-					</motion.ul>
-				</AnimateSharedLayout>
-			</MenuContainer>
-		</>
-	);
-}
-function MenuContainer({children, isOpen}) {
-	return (
-		<motion.div
-			layout
-			style={{
-				position: "absolute",
-				background: "#fff",
-				overflow: "hidden",
-				borderRadius: "24px 24px 0px 0px",
-				zIndex: "99999",
-				height: "85vh",
-				top: isOpen ? "90vh" : "10vh",
-			}}>
-			{children}
+		<motion.div layout>
+			<Menu
+				toggle={toggle}
+				cb={cb}
+				selected={selected}
+				theme={theme}
+				isOpen={isOpen}
+			/>
 		</motion.div>
 	);
 }
-//function MenuIcon({isOpen, cb}) {
-//	return (
-//		<motion.div
-//			layout
-//			style={{textAlign: "center", padding: 12, fontSize: "28px"}}>
-//			{isOpen ? <I.FiChevronsUp /> : <I.FiChevronsDown />}
-//		</motion.div>
-//	);
-//}
-function IconButton({iconName, isSelected, onClick}) {
+export function Menu({
+	cb,
+	selected,
+	height = "60px",
+	theme = {
+		colors: {text: "#f00", opaque: "rgba(255,255,255,.3)"},
+		space: ["4px", "8px", "12px", "16px"],
+	},
+
+	...rest
+}) {
+	const {colors, space} = theme;
+
+	return (
+		<motion.div layout {...rest}>
+			<AnimateSharedLayout>
+				<motion.ul
+					layout
+					className="ul"
+					style={{height: height, width: "100vw"}}>
+					{iconNames.map((iconName) => (
+						<MenuItem
+							colors={colors}
+							key={iconName}
+							iconName={iconName}
+							isSelected={selected === iconName}
+							onClick={() => cb(iconName)}
+						/>
+					))}
+				</motion.ul>
+			</AnimateSharedLayout>
+		</motion.div>
+	);
+}
+
+function MenuItem({iconName, isSelected, colors, onClick}) {
 	return (
 		<motion.li
-			layout
+			transition={spring}
+			style={{color: colors.text, height: "auto", padding: 12}}
 			className="icon-button"
-			onClick={onClick}
-			style={{color: "black"}}>
+			onClick={onClick}>
 			{isSelected && (
 				<motion.div
+					key="boo"
+					transition={spring}
+					style={{
+						borderColor: colors.text,
+						background: colors.opaque,
+					}}
 					layoutId="icon-button-selected"
 					className="icon-button-selected"
 					initial={false}
-					transition={spring}
 				/>
 			)}
-			<Icon
-				style={{
-					textAlign: "center",
-					background: "rgba(0,0,0,0)",
-					zIndex: "99",
-				}}
-				name={iconName}
-				size="24px"
-			/>
-			{iconName}
+			<>
+				<Icon
+					colors={colors}
+					className="icon"
+					style={{
+						textAlign: "center",
+						background: "rgba(0,0,0,0)",
+						zIndex: "99",
+					}}
+					name={iconName}
+				/>
+				<p style={{color: colors.text}}>{iconName}</p>
+			</>
 		</motion.li>
 	);
 }
 
-function Icon({name, ...rest}) {
+function Icon({name, colors, ...rest}) {
 	const Comp = Icons[name];
-	return <Comp {...rest} />;
+	return <Comp children={name} color={colors.text} {...rest} />;
 }
 const iconNames = ["Songs", "Products", "Reports", "Profile"];
 const Icons = {
@@ -100,9 +122,4 @@ const Icons = {
 	Products: I.FiDisc,
 	Profile: I.FiUser,
 };
-
-const spring = {
-	type: "spring",
-	stiffness: 500,
-	damping: 30,
-};
+const spring = {type: "spring", mass: 4, stiffness: 600, damping: 66};

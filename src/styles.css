@@ -25,6 +25,12 @@ ol {
   align-items: center;
 }
 
+.icon {
+  font-size: 24px;
+  cursor: pointer;
+
+}
+
 .title {
   font-size: 32px;
   margin-left: 20px;
