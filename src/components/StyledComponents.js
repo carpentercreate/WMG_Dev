@@ -167,3 +167,23 @@ export function J({
 		/>
 	);
 }
+//function Icon({name, ...rest}) {
+//	const Comp = Icons[name];
+//	return <Comp children={name} {...rest} />;
+//}
+//const Icons = {
+//	Add: I.FiPlus,
+//	Edit: I.FiEdit,
+//	Delete: I.FiX,
+//	Mic: I.FiMic,
+//	View: I.FiEye,
+//	Hide: I.FiEyeOff,
+//	Left: I.FiChevronLeft,
+//	Right: I.FiChevronRight,
+//	Down: I.FiChevronDown,
+//	Up: I.FiChevronUp,
+//	Songs: I.FiMusic,
+//	Reports: I.FiBarChart,
+//	Products: I.FiDisc,
+//	Profile: I.FiUser,
+//};
