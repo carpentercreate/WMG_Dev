@@ -60,50 +60,20 @@ export function AppContainer({children, ...rest}) {
 		</div>
 	);
 }
-export function Row({children, ...rest}) {
-	return (
-		<div {...rest} className="Row">
-			{children}
-		</div>
-	);
-}
-export function Col({children, ...rest}) {
-	return (
-		<div {...rest} className="Box">
-			{children}
-		</div>
-	);
-}
-export function StackX({children, ...rest}) {
-	return (
-		<S
-			backgroundColor="rgba(0,0,0,0)"
-			direction="horizontal"
-			{...rest}
-			className="Stack">
-			{children}
-		</S>
-	);
-}
-export function StackY({children, ...rest}) {
-	return (
-		<S backgroundColor="rgba(0,0,0,0)" {...rest}>
-			{children}
-		</S>
-	);
-}
+
 export function Frame({children, ...rest}) {
 	return <F {...rest}>{children}</F>;
 }
 F.defaultProps = {
 	background: "rgba(0,0,0,0)",
 };
-export function SwipeX({children, ...rest}) {
+export function SwipeX({children, currentPage, ...rest}) {
 	return (
 		<P
 			backgroundColor="rgba(0,0,0,.2)"
 			direction="horizontal"
 			defaultEffect="pile"
+			currentPage={currentPage}
 			{...rest}>
 			{children}
 		</P>
@@ -139,29 +109,4 @@ export function HelpText({children, ...rest}) {
 }
 export function ActionText({children, ...rest}) {
 	return <h6>{children}</h6>;
-}
-export function Progress({value = 0, goal = 4000}) {
-	return (
-		<>
-			<motion.div layout style={{width: "100%"}}>
-				<Frame p={1} direction="x" justify="between">
-					<p style={{color: "red"}}>
-						Current: <br />${value}
-					</p>
-					<p style={{color: "red"}}>
-						Goal: <br />${goal}
-					</p>
-				</Frame>
-				<motion.div
-					layout
-					initial={false}
-					animate={{
-						background: "red",
-						height: "70px",
-						width: `${(100 / goal) * value}vw`,
-					}}
-				/>
-			</motion.div>
-		</>
-	);
 }
