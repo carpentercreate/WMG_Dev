@@ -1,4 +1,5 @@
 import React from "react";
+
 import {preloadFirestore} from "reactfire";
 import {
 	preloadFirestoreDoc,
@@ -43,12 +44,12 @@ const preloadSDKs = (firebaseApp) => {
 const preloadData = async (firebaseApp) => {
 	const user = await preloadUser(firebaseApp);
 
-	//if (user) {
-	//	preloadFirestoreDoc(
-	//		(firestore) => firestore.doc("app/collections"),
-	//		firebaseApp
-	//	);
-	//}
+	if (user) {
+		preloadFirestoreDoc(
+			(firestore) => firestore.doc("api/accounts"),
+			firebaseApp
+		);
+	}
 };
 
 export default () => {
@@ -86,7 +87,4 @@ function Dashboard() {
 			<Loader />
 		</div>
 	);
-}
-function Reports({account}) {
-	return <div>{account.reports.financial.grossIncome}</div>;
 }
