@@ -1,12 +1,9 @@
 import * as React from "react";
-
+import createPersistedState from "use-persisted-state";
+const useGlobalState = createPersistedState("example");
 const useExample = (initial) => {
-	const [state, setState] = React.useState();
+	const [state, setState] = useGlobalState({x: 20});
 
-	const methods = {
-		setExample: setState,
-		resetExample: () => setState(initial),
-	};
 	return [state, methods];
 };
 export function ExampleProvider({children}) {
@@ -30,3 +27,6 @@ export const ExampleComponents = {
 		</div>
 	),
 };
+//(method, [state, setState])=>  method(React.useState())
+//factory for creating custom hooks
+///useHook()

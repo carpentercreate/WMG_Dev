@@ -1,5 +1,8 @@
 import React from "react";
+import createPersistedState from "use-persisted-state";
 
+import {Frame, Stack, Page, Scroll} from "framer";
+import _ from "lodash";
 import {preloadFirestore} from "reactfire";
 import {
 	preloadFirestoreDoc,
@@ -51,19 +54,23 @@ const preloadData = async (firebaseApp) => {
 		);
 	}
 };
+const useGlobalState = createPersistedState("test");
 
 export default () => {
 	const firebaseApp = useFirebaseApp();
 	preloadSDKs(firebaseApp).then(preloadData(firebaseApp));
-
+	const [state, setState] = useGlobalState({name: "WMG"});
 	return (
 		<SuspenseWithPerf fallback={"loading"} traceId={"main-app"}>
 			<Dashboard />
 		</SuspenseWithPerf>
 	);
 };
-function Dashboard() {
+
+function Dashboard(props) {
+	const ref = React.createRef();
 	const db = useFirestore();
+
 	const accountRef = db.collection("api").doc("accounts");
 	const account = useFirestoreDocData(accountRef, {
 		startWithValue: {
@@ -80,11 +87,23 @@ function Dashboard() {
 		},
 		{merge: true}
 	);
-
+	React.useEffect(() => {
+		console.log(ref.current);
+	}, [ref]);
 	return (
-		<div>
+		<div style={{minHeight: "100vh", position: "relative"}}>
 			<h1>{account.name}</h1>
-			<Loader />
+			<Frame center whileTap={{scale: 1.2}}>
+				<Frame
+					center
+					animate={{x: props.x}}
+					transition={{mass: 2}}
+					background={"red"}
+					size="50%"
+				/>
+			</Frame>
 		</div>
 	);
 }
+//animation controls
+//globalState.animationEditorState

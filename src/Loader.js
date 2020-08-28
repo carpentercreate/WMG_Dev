@@ -22,6 +22,7 @@ export function Loader({
 			<Stack alignment="end" direction="horizontal" size="40vw">
 				{bars.map((v, i) => (
 					<Frame
+						key={v + i}
 						originY={0}
 						style={{...styles}}
 						custom={[v, i]}
