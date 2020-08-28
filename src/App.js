@@ -5,22 +5,19 @@ import {
 	useFirebaseApp,
 	preloadUser,
 	preloadAuth,
+	useFirestore,
 	SuspenseWithPerf,
 	preloadStorage,
+	useFirestoreDocData,
 	preloadRemoteConfig,
 } from "reactfire";
-import {Dashboard} from "./Dashboard";
-
-// Our components will lazy load the
-// SDKs to decrease their bundle size.
-// Since we know that, we can start
-// fetching them now
+import {Loader} from "./Loader";
 const preloadSDKs = (firebaseApp) => {
 	return Promise.all([
 		preloadFirestore({
 			firebaseApp,
 			setup(firestore) {
-				return firestore().enablePersistence();
+				return firestore().enablePersistence({synchronizeTabs: true});
 			},
 		}),
 		preloadStorage({
@@ -46,22 +43,16 @@ const preloadSDKs = (firebaseApp) => {
 const preloadData = async (firebaseApp) => {
 	const user = await preloadUser(firebaseApp);
 
-	if (user) {
-		preloadFirestoreDoc(
-			(firestore) => firestore.doc("styles/dashboard"),
-			firebaseApp
-		);
-	}
+	//if (user) {
+	//	preloadFirestoreDoc(
+	//		(firestore) => firestore.doc("app/collections"),
+	//		firebaseApp
+	//	);
+	//}
 };
 
 export default () => {
 	const firebaseApp = useFirebaseApp();
-
-	// Kick off fetches for SDKs and data that
-	// we know our components will eventually need.
-	//
-	// This is OPTIONAL but encouraged as part of the render-as-you-fetch pattern
-	// https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense
 	preloadSDKs(firebaseApp).then(preloadData(firebaseApp));
 
 	return (
@@ -70,3 +61,32 @@ export default () => {
 		</SuspenseWithPerf>
 	);
 };
+function Dashboard() {
+	const db = useFirestore();
+	const accountRef = db.collection("api").doc("accounts");
+	const account = useFirestoreDocData(accountRef, {
+		startWithValue: {
+			name: "Account Settings",
+			admins: ["garmon@gnome.garden"],
+			reports: {financial: {grossIncome: 3445}},
+		},
+	});
+	accountRef.set(
+		{
+			name: "Account Settings",
+			admins: ["garmon@gnome.garden"],
+			reports: {financial: {grossIncome: 3445}},
+		},
+		{merge: true}
+	);
+
+	return (
+		<div>
+			<h1>{account.name}</h1>
+			<Loader />
+		</div>
+	);
+}
+function Reports({account}) {
+	return <div>{account.reports.financial.grossIncome}</div>;
+}

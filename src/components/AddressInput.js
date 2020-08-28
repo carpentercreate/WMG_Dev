@@ -1,10 +1,10 @@
-import React from "react";
+import React from "./node_modules/react";
 import usePlacesAutocomplete, {
 	getGeocode,
 	getLatLng,
 } from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
-import {motion} from "framer-motion";
+import {motion} from "./node_modules/framer-motion";
 export default function PlacesAutocomplete() {
 	const {
 		ready,
