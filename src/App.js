@@ -1,109 +1,49 @@
 import React from "react";
-import createPersistedState from "use-persisted-state";
+import * as C from "./COMPONENTS";
+import {ThemeProvider} from "theme-ui";
+//import {SignIn} from "./components/Auth";
+//import _ from "lodash";
+import {SuspenseWithPerf} from "./FIREBASE";
+import {useFirestore, useUser, useFirestoreDoc} from "reactfire";
+const {Loader} = C;
 
-import {Frame, Stack, Page, Scroll} from "framer";
-import _ from "lodash";
-import {preloadFirestore} from "reactfire";
-import {
-	preloadFirestoreDoc,
-	useFirebaseApp,
-	preloadUser,
-	preloadAuth,
-	useFirestore,
-	SuspenseWithPerf,
-	preloadStorage,
-	useFirestoreDocData,
-	preloadRemoteConfig,
-} from "reactfire";
-import {Loader} from "./Loader";
-const preloadSDKs = (firebaseApp) => {
-	return Promise.all([
-		preloadFirestore({
-			firebaseApp,
-			setup(firestore) {
-				return firestore().enablePersistence({synchronizeTabs: true});
-			},
-		}),
-		preloadStorage({
-			firebaseApp,
-			setup(storage) {
-				return storage().setMaxUploadRetryTime(10000);
-			},
-		}),
-		preloadAuth({firebaseApp}),
-		preloadRemoteConfig({
-			firebaseApp,
-			setup(remoteConfig) {
-				remoteConfig().settings = {
-					minimumFetchIntervalMillis: 10000,
-					fetchTimeoutMillis: 10000,
-				};
-				return remoteConfig().fetchAndActivate();
-			},
-		}),
-	]);
-};
-
-const preloadData = async (firebaseApp) => {
-	const user = await preloadUser(firebaseApp);
-
-	if (user) {
-		preloadFirestoreDoc(
-			(firestore) => firestore.doc("api/accounts"),
-			firebaseApp
-		);
-	}
-};
-const useGlobalState = createPersistedState("test");
-
-export default () => {
-	const firebaseApp = useFirebaseApp();
-	preloadSDKs(firebaseApp).then(preloadData(firebaseApp));
-	const [state, setState] = useGlobalState({name: "WMG"});
-	return (
-		<SuspenseWithPerf fallback={"loading"} traceId={"main-app"}>
-			<Dashboard />
-		</SuspenseWithPerf>
-	);
-};
-
-function Dashboard(props) {
-	const ref = React.createRef();
+function Dashboard() {
 	const db = useFirestore();
+	const docref = db.doc("views/Dashboard");
+	const doc = useFirestoreDoc(docref);
+	const state = doc.data();
+	const user = useUser();
 
-	const accountRef = db.collection("api").doc("accounts");
-	const account = useFirestoreDocData(accountRef, {
-		startWithValue: {
-			name: "Account Settings",
-			admins: ["garmon@gnome.garden"],
-			reports: {financial: {grossIncome: 3445}},
-		},
-	});
-	accountRef.set(
-		{
-			name: "Account Settings",
-			admins: ["garmon@gnome.garden"],
-			reports: {financial: {grossIncome: 3445}},
-		},
-		{merge: true}
-	);
-	React.useEffect(() => {
-		console.log(ref.current);
-	}, [ref]);
 	return (
-		<div style={{minHeight: "100vh", position: "relative"}}>
-			<h1>{account.name}</h1>
-			<Frame center whileTap={{scale: 1.2}}>
-				<Frame
-					center
-					animate={{x: props.x}}
-					transition={{mass: 2}}
-					background={"red"}
-					size="50%"
-				/>
-			</Frame>
+		<div>
+			<h3>{state.name}</h3>
+			<h6>signed in as {user.email}</h6>
 		</div>
 	);
 }
-//animation controls
-//globalState.animationEditorState
+
+const initialTheme = {
+	colors: {
+		primary: "#DC3F32",
+		background: "white",
+		text: "black",
+		modes: {
+			dark: {
+				text: "white",
+				background: "black",
+				primary: "#DC3F32",
+			},
+		},
+	},
+};
+
+export default () => {
+	return (
+		<ThemeProvider theme={initialTheme}>
+			<SuspenseWithPerf fallback={<Loader />} tracebackId={"dashboard"}>
+				<Dashboard />
+			</SuspenseWithPerf>
+		</ThemeProvider>
+	);
+};
+/////FIELDMAPPER, LAYOUT,

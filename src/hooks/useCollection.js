@@ -6,17 +6,19 @@ import {
 	useFirestoreDocData,
 	useFirestoreCollectionData,
 } from "reactfire";
+import {useLatest} from "react-use";
 export const l = console.log;
 
 export const useCollection = (id) => {
 	const db = useFirestore();
 	const collref = db.collection(id);
-	const collection = useFirestoreCollectionData(collref);
-	const [results, setResults] = useState();
+	const coll = useFirestoreCollectionData(collref);
+	const collection = useLatest(coll);
+	const [results, setResults] = useState(collection);
 
 	const methods = {
 		removeDoc: (id) =>
-			collection
+			collref
 				.doc(id)
 				.delete()
 				.then((doc) => console.log("doc was deleted"))

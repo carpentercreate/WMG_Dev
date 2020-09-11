@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from "react";
 import _ from "lodash";
-import {useFirestore, useFirestoreDocData} from "reactfire";
+import {
+	useFirestore,
+	useFirestoreCollectionData,
+	useFirestoreDocData,
+} from "reactfire";
 export const l = console.log;
 
 export function useDoc(collectionID, docID) {
@@ -44,3 +48,12 @@ export function useDoc(collectionID, docID) {
 
 export const getUniqueObjectFields = (newO, prevO) =>
 	_.pickBy(newO, (v, k) => !_.isEqual(prevO[k], v));
+
+export const useTheme = (path, initial) => {
+	const db = useFirestore;
+	const docref = db()
+		.collection(collectionID)
+		.doc(docID);
+
+	return [theme, {update, removeField, incrementField}];
+};

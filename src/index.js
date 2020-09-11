@@ -1,32 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {FirebaseAppProvider} from "reactfire";
-import {firebaseConfig} from "./config";
+import {FirebaseApp} from "./FIREBASE";
 import * as serviceWorker from "./serviceWorker";
-import GoogleFontLoader from "react-google-font-loader";
-
 import "./styles.css";
 import App from "./App";
-
+import {Loader} from "./components/Loader";
 const rootElement = document.getElementById("root");
 ReactDOM.render(
 	<React.StrictMode>
-		<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-			<GoogleFontLoader
-				fonts={[
-					{
-						font: "Roboto",
-						weights: [400, "400i"],
-					},
-					{
-						font: "Roboto Mono",
-						weights: [400, 700],
-					},
-				]}
-				subsets={["cyrillic-ext", "greek"]}
-			/>
+		<FirebaseApp fallback={<Loader />}>
 			<App />
-		</FirebaseAppProvider>
+		</FirebaseApp>
 	</React.StrictMode>,
 	rootElement
 );
