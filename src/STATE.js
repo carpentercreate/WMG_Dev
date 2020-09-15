@@ -8,3 +8,13 @@ import React, {useState, useEffect} from "react";
 //	const remove = (key) => update({[key]: FieldValue.delete()});
 //	return [doc, {docref, set, update, remove}];
 //};
+function Account({name, initialState, ...rest}){
+     const [state, setState] = React.useState(initialState)
+     return( 
+		 <div>
+		 <ul>
+		 
+		 </ul>
+		 </div>
+		 )
+	 }
