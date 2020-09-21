@@ -12,6 +12,8 @@ import {
 	Label,
 } from "theme-ui";
 import {When} from "react-if";
+import {useFormState} from "react-use-form-state";
+
 import {
 	Color,
 	Frame,
@@ -21,6 +23,7 @@ import {
 	useMotionValue,
 	useTransform,
 	AnimatePresence,
+	useAnimation,
 	Stack,
 } from "framer";
 import _ from "lodash";
@@ -66,6 +69,7 @@ export default ({children}) => {
 			<Logo fallback={<Auth />}>
 				<Dashboard />
 			</Logo>
+			<AnimationControls />
 		</ThemeProvider>
 	);
 };
@@ -221,7 +225,6 @@ export function useDoc(path) {
 	const removeField = (k) => docref.update({[k]: FieldValue.delete()});
 	const merge = (v) => docref.set(v, {merge: true});
 	const {set, update} = docref;
-	const doc = useFirestoreDocData(docref);
 
 	return [
 		doc,
@@ -234,17 +237,34 @@ export function useDoc(path) {
 			arrayRemove,
 			increment,
 			removeField,
-			deleteArrayItems,
-			updateArrayItems,
-			inc,
 		},
 	];
 }
+export function AnimationControls({children}) {
+	const controls = useAnimation();
+	const [formState, {range, number, text, checkbox}] = useFormState({
+		value: 40,
+		ky: "scale",
+	});
+
+	const animate = ({ky, value}) => controls.start({[ky]: +value * 0.01});
+
+	return (
+		<div className="AnimationControls">
+			<Frame initial={{background: "red", size: 200}} animate={controls} />
+			<form onChange={(e) => animate(formState.values)}>
+				<input {...text("ky")} />
+				<input {...range("value")} />
+			</form>
+		</div>
+	);
+}
 function Reports(props) {
 	const [songId, setSongId] = useState("happyBirthDay");
+	const db = useFirestore();
 	const songsRef = db
 		.collection("songs")
-		.where("accounts", "array-contains", account.id);
+		.where("accounts", "array-contains", songId);
 	const songs = useFirestoreCollectionData(songsRef, {idField: "id"});
 	const songref = (id) => db.collection("songs").doc(id);
 	const song = useFirestoreDocData(songref(songId));
