@@ -9,7 +9,7 @@
     "@microlink/mql": "^0.7.9",
     "compromise": "13.3.1",
     "firebase": "^7.21.0",
-    "flat": "5.0.0",
+    "flat": "5.0.1",
     "framer": "1.2.5",
     "framer-motion": "^2.6.0",
     "kind-of": "6.0.3",
